@@ -14,7 +14,7 @@ AI automation engineer who designs and ships production agent systems end to end
 
 ## Core skills
 
-**Orchestration:** n8n (self-hosted, Docker, VPS), webhooks, scheduled/cron triggers
+**Orchestration:** n8n (self-hosted on a Hostinger VPS), webhooks, scheduled/cron triggers
 **LLMs:** Anthropic Claude, Google Gemini, Groq (Llama 3.3-70B); prompt engineering, tool/function calling, structured-output parsing
 **RAG:** Supabase / pgvector, document ingestion pipelines, chunking, embedding, retrieval
 **Voice & messaging:** Vapi, Twilio (SMS + voice, A2P 10DLC), Telegram bots, Meta Messenger (Graph API), SMTP/IMAP

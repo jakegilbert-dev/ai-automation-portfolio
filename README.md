@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/29184819/README.md)
 # AI Automation Engineering — Portfolio
 
 I'm Jake Gilbert. I design and build production AI agent systems on **n8n**: multi-channel agents, RAG pipelines, voice/SMS automation, and CRM-integrated lead workflows.
@@ -9,7 +8,7 @@ This portfolio documents a real, end-to-end multi-agent system I architected and
 
 ## What I work with
 
-**Orchestration:** n8n (self-hosted via Docker on a VPS), webhooks, scheduled triggers, cron gating
+**Orchestration:** n8n (self-hosted on a Hostinger VPS), webhooks, scheduled triggers, cron gating
 **LLMs & AI:** Anthropic Claude, Google Gemini, Groq (Llama 3.3-70B), prompt engineering for reliable structured output, tool-calling / function-calling agents
 **RAG:** Supabase / pgvector embeddings, document ingestion pipelines, chunking, retrieval-augmented agents
 **Voice & messaging:** Vapi (voice agents), Twilio (SMS + voice, A2P 10DLC registration), Telegram bots, Facebook/Instagram Messenger (Meta Graph API), email (SMTP/IMAP)
@@ -39,13 +38,13 @@ I've also adapted this lead-gen pattern for an external business — a fleet-veh
 
 ## Case studies
 
-### 1. [Lead-Gen Pipeline — scrape → enrich → AI-score → route](./case-studies/01-lead-gen-pipeline.md)
+### 1. [Lead-Gen Pipeline — scrape → enrich → AI-score → route](./01-lead-gen-pipeline.md)
 A Telegram-controlled workflow that turns a plain-English command ("Find HVAC companies in Dallas") into a stream of pre-qualified, scored leads in a CRM. Covers the Google Maps + Firecrawl scrape, a JavaScript pre-filter, a Gemini qualification prompt extracting seven fields plus a 1–5 fit score, and three-way CRM routing. Includes the real bugs I hit and how I fixed them.
 
-### 2. [Multi-Channel Inbound Agent with RAG + Memory](./case-studies/02-multichannel-agent.md)
+### 2. [Multi-Channel Inbound Agent with RAG + Memory](./02-multichannel-agent.md)
 My most advanced build: a single agent that answers across email, SMS, Telegram, and chat, normalizes each channel into one pipeline, keys persistent Postgres conversation memory to a lead ID, retrieves from a Supabase vector knowledge base, and writes back to the CRM via tool calls. Covers the architecture and the debugging of tool-call wiring and channel normalization.
 
-### 3. [RAG Document Ingestion Pipeline](./case-studies/03-rag-ingestion.md)
+### 3. [RAG Document Ingestion Pipeline](./03-rag-ingestion.md)
 The knowledge-base backbone: an Airtable-driven pipeline that ingests mixed media (text, PDF, video), converts each type to text, and stores vector embeddings in Supabase. Covers the Switch-node media routing, a vector dimension mismatch I diagnosed and fixed, and a subtle data-context bug where the vector store overwrote the record reference mid-workflow.
 
 ---
@@ -54,7 +53,7 @@ The knowledge-base backbone: an Airtable-driven pipeline that ingests mixed medi
 
 Each case study follows the same shape: **the problem**, **the architecture**, **the hard parts** (real bugs and design decisions), and **what I'd do next**. The point isn't that these systems are perfect — it's to show how I think through building and debugging production automation.
 
-Sanitized workflow JSON for each is in [`/workflows`](./workflows).
+Sanitized workflow JSON for each will be added to this repo (in progress).
 
 ---
 
