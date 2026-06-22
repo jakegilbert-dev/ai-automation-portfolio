@@ -1,0 +1,2182 @@
+{
+  "name": "WCAI, Rufus_Bot  Leads Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "ffba55f2-89bc-4983-b9b2-b8c066d9acc6",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2736,
+        256
+      ],
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a514fc68-7520-4618-a042-2eaa76e834d9",
+              "leftValue": "={{ $json.message.text.toLowerCase() }}",
+              "rightValue": "pause",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "93c831ce-9a18-45ed-8c3c-e0ae4d58b799",
+              "leftValue": "={{ $json.message.text.toLowerCase() }}",
+              "rightValue": "resume",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "75c14f1b-f77c-46a8-a616-0e6f2d6e199c",
+              "leftValue": "={{ $json.message.text.toLowerCase() }}",
+              "rightValue": "status",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2512,
+        256
+      ],
+      "id": "10d60fbb-170e-4a35-bfc7-2d6743d3af09",
+      "name": "Is Command?"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text.toLowerCase() }}",
+                    "rightValue": "pause",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "3d44810d-ac2d-4476-bb51-7710936bb453"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pause"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a5807cb0-a47c-4953-b392-49435cdcb064",
+                    "leftValue": "={{ $json.message.text.toLowerCase() }}",
+                    "rightValue": "resume",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "resume"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ac0025df-6511-4c99-bd60-03657f9e3470",
+                    "leftValue": "={{ $json.message.text.toLowerCase() }}",
+                    "rightValue": "status",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "status"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -2224,
+        -64
+      ],
+      "id": "51f6cef5-2c02-4dc2-8969-d15995526c16",
+      "name": "Which Command?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "YOUR_SHEET_GID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Settings": "Email Active",
+            "Value": "No"
+          },
+          "matchingColumns": [
+            "Settings"
+          ],
+          "schema": [
+            {
+              "id": "Settings",
+              "displayName": "Settings",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1936,
+        -240
+      ],
+      "id": "1d7c930d-f4bd-4b7c-aea1-9f7fcb603aca",
+      "name": "Set Email Paused",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "YOUR_SHEET_GID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Settings": "Email Active",
+            "Value": "Yes"
+          },
+          "matchingColumns": [
+            "Settings"
+          ],
+          "schema": [
+            {
+              "id": "Settings",
+              "displayName": "Settings",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1936,
+        -48
+      ],
+      "id": "c32b38a0-119d-47a5-b3e5-bd1d3a594318",
+      "name": "Set Email Active",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "\u23f8\ufe0f Email outreach paused. No new emails will be sent until you say \"resume emails\".",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1712,
+        -240
+      ],
+      "id": "395486a2-44b4-4077-ac94-993fd309f865",
+      "name": "Paused Message",
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "\u25b6\ufe0f Email outreach resumed!",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1712,
+        -48
+      ],
+      "id": "e4967d0a-ba01-4168-b69b-32b8617a46e8",
+      "name": "Resume Message",
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// STATUS COMMAND \u2014 reads from Airtable (paginated) + Google Sheets toggle\n// ============================================================\nconst AIRTABLE_PAT = 'YOUR_AIRTABLE_PAT';\nconst BASE_ID = 'YOUR_AIRTABLE_BASE_ID';\nconst LEADS_TABLE = 'YOUR_LEADS_TABLE_ID';\n\ntry {\n  // Paginate through ALL records\n  let allLeads = [];\n  let offset = null;\n\ndo {\n    let endpoint = `https://api.airtable.com/v0/${BASE_ID}/${LEADS_TABLE}?fields[]=Status&fields[]=Emailed&pageSize=100`;\n    if (offset) endpoint += `&offset=${encodeURIComponent(offset)}`;\n\n    const data = await this.helpers.httpRequest({\n      method: 'GET',\n      url: endpoint,\n      headers: {\n        'Authorization': `Bearer ${AIRTABLE_PAT}`\n      }\n    });\n\n    if (!data || !data.records) {\n      throw new Error('No records returned from Airtable \u2014 check your PAT and Base ID');\n    }\n\n    allLeads = allLeads.concat(data.records);\n    offset = data.offset || null;\n\n  } while (offset);\n\n  const total      = allLeads.length;\n  const newLeads   = allLeads.filter(r => r.fields.Status === 'New Lead').length;\n  const contacted  = allLeads.filter(r => r.fields.Status === 'Contacted').length;\n  const interested = allLeads.filter(r => r.fields.Status === 'Interested').length;\n  const closed     = allLeads.filter(r => r.fields.Status === 'Closed').length;\n\n  // Read Email Active toggle from Google Sheets\n  const settings = $input.all();\n  let active = 'Unknown';\n  for (const row of settings) {\n    if (row.json.Settings === 'Email Active') {\n      active = row.json.Value;\n      break;\n    }\n  }\n\n  const statusEmoji = active === 'Yes' ? '\ud83d\udfe2 ACTIVE' : (active === 'No' ? '\ud83d\udd34 PAUSED' : '\u26aa UNKNOWN');\n\n  return [{\n    json: {\n      message: `\ud83d\udcca <b>Pipeline Status</b>\\n\\n\ud83d\udccb Total leads: ${total}\\n\ud83c\udd95 New leads: ${newLeads}\\n\ud83d\udcec Contacted: ${contacted}\\n\ud83d\udd25 Interested: ${interested}\\n\u2705 Closed: ${closed}\\n\\n\u26a1 Email outreach: ${statusEmoji}`\n    }\n  }];\n\n} catch(e) {\n  return [{ json: { message: `\u274c Status error: ${e.message}` } }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1712,
+        160
+      ],
+      "id": "744ec4d0-d0c6-4fae-9591-612a887a5b12",
+      "name": "Build Status Message"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Settings"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "YOUR_SHEET_GID",
+          "mode": "list",
+          "cachedResultName": "Settings"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1936,
+        160
+      ],
+      "id": "2f5898e7-256c-40e8-8cae-37468c4b6831",
+      "name": "Read Settings",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1488,
+        160
+      ],
+      "id": "ac0c9d26-aad4-4a67-be8d-d98b6a3f9c5d",
+      "name": "Send Status",
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -2224,
+        672
+      ],
+      "id": "4926d0d6-4489-4506-b1d2-2b20dcf4b4f1",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Google Gemini account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$json.message.text}}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are the Query Extractor in an automated lead generation pipeline for Working Class AI, an agency selling AI voice agents to small and medium-sized businesses. Your only job is to convert a user's natural language message into a clean search string for the Google Maps API.\n\nYou do NOT search the web. You do NOT find businesses. You ONLY format the output string.\n\nINSTRUCTIONS:\n1. Read the incoming message.\n2. Identify the type of business or service being requested.\n3. Identify the geographic location.\n4. Return the result in this exact format: Business Type in Location\n\nPRIORITY INDUSTRIES (these are ideal targets \u2014 format them exactly as shown if mentioned):\n- HVAC Companies | Plumbers | Roofers | Electricians | Landscaping Companies | Pest Control Companies | Appliance Repair Companies\n- Dental Offices | Chiropractic Offices | MedSpas | Physical Therapy Clinics | Mental Health Practices\n- Real Estate Agencies | Property Management Companies\n- Personal Injury Law Firms | Family Law Firms | Immigration Law Firms\n- Auto Repair Shops | Insurance Agencies\n\nOUTPUT RULES:\n- Capitalize the business type and location properly (e.g. \"HVAC Companies in Dallas, Texas\")\n- Pluralize the business type when appropriate (plumber \u2192 Plumbers)\n- No brackets, no quotes, no preamble, no explanation\n- Return the raw string only\n\nFAILSAFE:\nIf the message is empty, unclear, or does not contain both a service type AND a location, return exactly:\nEMPTY_INPUT\nDo not return anything else in this case.\n\nEXAMPLES:\nMessage: \"hey rufus find me roofers in dallas texas\"\nOutput: Roofers in Dallas, Texas\n\nMessage: \"need a plumber in arizona\"\nOutput: Plumbers in Arizona\n\nMessage: \"find hvac companies in denver\"\nOutput: HVAC Companies in Denver, Colorado\n\nMessage: \"what's the weather like\"\nOutput: EMPTY_INPUT"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -2288,
+        448
+      ],
+      "id": "6bcd51fc-ea43-4ec1-a848-b5180d159b36",
+      "name": "Extract Map Query"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "19d10f15-b5bc-42fb-897b-f7304fdc0812",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "EMPTY_INPUT",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1936,
+        448
+      ],
+      "id": "a4f9e280-9c94-4e34-9109-349949439b33",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "\u274c Sorry, I didn't understand that. Try something like: \"Find HVAC companies in Denver Colorado\" or \"Find dental offices in Atlanta Georgia\"",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1712,
+        544
+      ],
+      "id": "0961defb-aba5-4414-a25d-73233aae9ef4",
+      "name": "Send a text message1",
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=\ud83d\udd0d Copy! Searching for: <b>{{ $json.text }}</b>\n\n    I'll send you a full report when I'm done.",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1712,
+        352
+      ],
+      "id": "e539b227-d96a-4a4f-826d-3aafe3efda33",
+      "name": "Send Ack \u2014 Searching",
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://places.googleapis.com/v1/places:searchText",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Goog-FieldMask",
+              "value": "places.displayName,places.formattedAddress,places.websiteUri,places.nationalPhoneNumber,places.rating,places.userRatingCount,places.businessStatus"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ textQuery: $('Extract Map Query').item.json.text }) }}",
+        "options": {}
+      },
+      "id": "9b62ce42-5c2a-4adb-bf93-a525cfe1068c",
+      "name": "Google Maps API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1488,
+        352
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CREDENTIAL_ID",
+          "name": "Google Maps API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// QUALIFICATION PRE-FILTER\n// Pulls places from Google Maps and filters to businesses that\n// match the Working Class AI ideal customer profile:\n//   - Must have a website\n//   - Must be OPERATIONAL\n//   - Must have at least 10 reviews (established business)\n//   - Must have a rating of 3.5+ (healthy, active business)\n// This saves Firecrawl credits by skipping junk leads early.\n// ============================================================\n\nconst places = $('Google Maps API').item.json.places;\n\nif (!places || places.length === 0) {\n  return [];\n}\n\nconst filtered = places.filter(place => {\n  // Must have a website to scrape\n  if (!place.websiteUri) return false;\n\n  // Must be an active, open business\n  if (place.businessStatus && place.businessStatus !== 'OPERATIONAL') return false;\n\n  // Must have at least 10 reviews \u2014 signals an established business with real customers\n  // and enough revenue to have a budget for our services\n  if (place.userRatingCount !== undefined && place.userRatingCount < 10) return false;\n\n  // Must have a rating of 3.5 or higher \u2014 filters out dying or poorly-run businesses\n  // that likely don't have budget or are not worth targeting\n  if (place.rating !== undefined && place.rating < 3.5) return false;\n\n  return true;\n});\n\nreturn filtered.map(place => ({ json: place }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1264,
+        352
+      ],
+      "id": "8c7d3998-fb29-4f5c-86cd-62d9800071f3",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "87ce18e4-cb0f-43f5-8ff1-315a25b4ccfd",
+              "leftValue": "={{ $json.websiteUri }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -1040,
+        352
+      ],
+      "id": "56ccc9f8-1214-4251-bc3e-a8c25fe914dd",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -816,
+        352
+      ],
+      "id": "828ff9f3-907e-468a-9241-fdcbc4ed5314",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.firecrawl.dev/v1/crawl",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $json.websiteUri, limit: 5, scrapeOptions: { formats: ['markdown'], onlyMainContent: true } }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -592,
+        -240
+      ],
+      "id": "ebc62636-5119-4041-a87a-cfd987dd4dba",
+      "name": "Firecrawl Crawl Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CREDENTIAL_ID",
+          "name": "Firecrawl API"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -368,
+        -384
+      ],
+      "id": "3e942dd5-eeae-45c1-967e-9db4a9a33d72",
+      "name": "Wait",
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "url": "=https://api.firecrawl.dev/v1/crawl/{{ $('Firecrawl Crawl Request').item.json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -144,
+        -512
+      ],
+      "id": "343441e6-6a3f-4cc4-b777-4ccccf15db3b",
+      "name": "Check Crawl Status",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CREDENTIAL_ID",
+          "name": "Firecrawl API"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "completed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "44a306dc-af80-4957-856e-fad5b3b89b2d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "completed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c64d0fc8-31ef-43ec-aed4-51c2b83367a2",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "scraping",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "scraping"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4f2afa1d-b985-4fde-ab90-b23976c518aa",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "pending",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pending"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        -624
+      ],
+      "id": "eaccb742-55f1-426c-b043-3321671b7ec5",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=={{ \n  (() => {\n    const pages = $json.data || [];\n    const content = pages\n      .map(p => p.markdown || '')\n      .filter(m => m.trim().length > 0)\n      .join('\\n\\n--- NEXT PAGE ---\\n\\n');\n    return content.length > 0 \n      ? content \n      : 'No readable website content was found. Please return the JSON fallback with all fields set to Not Found or Unknown, and qualification_score of 1.';\n  })()\n}}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a lead qualification assistant for Working Class AI, an agency that sells AI voice agents to small and medium-sized businesses. Your job is to extract contact information AND score this business as a potential client, using only clues found in the website content provided.\n\nTARGET CUSTOMER PROFILE:\n- 5 to 50 employees (or strong signals of this size)\n- Established business, ideally 2+ years old\n- Service-based business that relies heavily on inbound phone calls\n- Has the budget to invest \u2014 signals of $500K to $10M in annual revenue\n- Priority industries: HVAC, plumbing, roofing, electrical, landscaping, pest control, dental, chiropractic, MedSpa, physical therapy, mental health practices, real estate agencies, property management, personal injury law, family law, immigration law, auto repair, independent insurance agencies\n\nEXTRACTION RULES:\n\nEmail: Find the most direct contact email available. Prefer personal emails (john@company.com) over generic ones (info@, contact@, hello@). If only a generic email exists, return it anyway. If no email exists at all, return \"Not Found\".\n\nName: Find the business owner, founder, or primary decision-maker only. Ignore general staff, receptionists, or unnamed roles. If not found, return \"Not Found\".\n\nCompany Size: Look for clues such as team/staff pages with listed employees, phrases like \"our team of X\", \"family-owned\", \"our X technicians\", \"we have X locations\", job postings with headcount signals, or org structure hints. Estimate one of: \"Solo\", \"Small (2-10)\", \"Medium (11-50)\", or \"Unknown\".\n\nYears in Business: Look for a founding year, phrases like \"serving [city] since [year]\", \"X years of experience\", or anniversary mentions. Return the number of years in business as an integer, or \"Unknown\" if not found.\n\nMulti Location: Does the site mention multiple office locations, service areas across several cities, or franchise/branch language? Return \"Yes\" or \"No\".\n\nHiring Signal: Does the site have a careers page, open job listings, a \"we're hiring\" or \"join our team\" message? A business actively hiring is growing and likely has budget. Return \"Yes\" or \"No\".\n\nCall Volume Signal: Does the business clearly rely on inbound phone calls? Look for: prominent phone numbers displayed above the fold, phrases like \"call us now\", \"available 24/7\", \"emergency service\", \"free estimates by phone\", \"book by phone\", appointment scheduling mentions, or \"call for a quote\". Return \"High\", \"Medium\", or \"Low\".\n\nQualification Score: Based on all signals above, rate this lead on a scale of 1 to 5 for how well they fit the Working Class AI ideal customer profile.\n5 = Perfect fit: right industry, right size (5-50 employees), high call volume, established, and shows growth signals like hiring or multiple locations\n4 = Strong fit: right industry, established business, some call volume signals, size is likely in range\n3 = Possible fit: right industry but size, call volume, or budget signals are unclear\n2 = Weak fit: wrong industry, or appears too small (solo operator) or too large (enterprise)\n1 = Not a fit: clearly outside the target profile\n\nQualification Notes: Write 1 to 2 sentences explaining the score. What makes them a strong or weak fit? What specific pain point would an AI voice agent solve for this business?\n\nOUTPUT RULES:\n- Return ONLY a raw JSON object\n- No markdown, no backticks, no explanation, no preamble\n- Never leave a field blank or omit it \u2014 use the fallback values specified above\n- All field names must match exactly as shown below\n\nOUTPUT FORMAT:\n{\"email\":\"found_email_or_Not Found\",\"name\":\"found_name_or_Not Found\",\"company_size\":\"Solo|Small (2-10)|Medium (11-50)|Unknown\",\"years_in_business\":\"number_or_Unknown\",\"multi_location\":\"Yes|No\",\"hiring_signal\":\"Yes|No\",\"call_volume_signal\":\"High|Medium|Low\",\"qualification_score\":1,\"qualification_notes\":\"1-2 sentence explanation here\"}"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        304,
+        -640
+      ],
+      "id": "41953988-49ce-486f-8196-3ec27468f311",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        384,
+        -416
+      ],
+      "id": "46bab295-7b24-470d-a01a-14610f2be147",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Google Gemini account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// PARSE LLM RESPONSE\n// Safely parses the Gemini JSON output and extracts all\n// qualification fields. Falls back gracefully on any parse error.\n// ============================================================\n\nconst raw = $input.item.json.text || '';\nconst cleaned = raw.replace(/```json|```/gi, '').trim();\n\nlet parsed;\ntry {\n  parsed = JSON.parse(cleaned);\n} catch (e) {\n  parsed = {\n    email: 'Not Found',\n    name: 'Not Found',\n    company_size: 'Unknown',\n    years_in_business: 'Unknown',\n    multi_location: 'No',\n    hiring_signal: 'No',\n    call_volume_signal: 'Unknown',\n    qualification_score: 1,\n    qualification_notes: 'Could not parse website content \u2014 review manually.'\n  };\n}\n\nreturn {\n  json: {\n    email: parsed.email || 'Not Found',\n    name: parsed.name || 'Not Found',\n    company_size: parsed.company_size || 'Unknown',\n    years_in_business: String(parsed.years_in_business || 'Unknown'),\n    multi_location: parsed.multi_location || 'No',\n    hiring_signal: parsed.hiring_signal || 'No',\n    call_volume_signal: parsed.call_volume_signal || 'Unknown',\n    qualification_score: parsed.qualification_score || 1,\n    qualification_notes: parsed.qualification_notes || ''\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -640
+      ],
+      "id": "76489cf2-28ae-4699-a7b1-846df6fa674d",
+      "name": "Parse LLM response"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fab01ff7-3cdd-41d8-a65b-cf8c20a8bb36",
+              "leftValue": "={{ $json.qualification_score }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        -640
+      ],
+      "id": "696c5016-9bbb-49cc-be5f-f7bd26fd9707",
+      "name": "Score Filter (2+)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fab01ff7-3cdd-41d8-a65b-cf8c20a8bb37",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "Not Found",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1104,
+        -640
+      ],
+      "id": "5bc28899-9e93-45b3-b2fa-fd084f98ddc9",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "table": {
+          "__rl": true,
+          "value": "YOUR_LEADS_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Website": "={{ $('Loop Over Items').item.json.websiteUri || '' }}",
+            "Emailed": true,
+            "Type of Business": "={{ $('Extract Map Query').item.json.text.split(' in ')[0] }}",
+            "Email": "={{ $json.email }}",
+            "First Name": "={{ $json.name !== 'Not Found' ? $json.name.split(' ')[0] : '' }}",
+            "Last Name": "={{ $json.name !== 'Not Found' && $json.name.split(' ').length > 1 ? $json.name.split(' ').slice(1).join(' ') : '' }}",
+            "Status": "New Lead",
+            "Business Name": "={{ $('Loop Over Items').item.json.displayName.text || 'Name Not Found' }}",
+            "Source": "={{ 'Google Maps \u2014 ' + $('Extract Map Query').item.json.text }}",
+            "Email Attempt": 1,
+            "Phone": "={{ $('Loop Over Items').item.json.nationalPhoneNumber \n\n '' }}",
+            "Date Contacted": "={{ $now.toFormat('yyyy-MM-dd') }}",
+            "Email Follow Up Date": "={{ $today.plus({days: 3}).toISODate() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead ID",
+              "displayName": "Lead ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New Lead",
+                  "value": "New Lead"
+                },
+                {
+                  "name": "Contacted",
+                  "value": "Contacted"
+                },
+                {
+                  "name": "Interested",
+                  "value": "Interested"
+                },
+                {
+                  "name": "Booked",
+                  "value": "Booked"
+                },
+                {
+                  "name": "Closed",
+                  "value": "Closed"
+                },
+                {
+                  "name": "Status",
+                  "value": "Status"
+                },
+                {
+                  "name": "New",
+                  "value": "New"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Type of Business",
+              "displayName": "Type of Business",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Business Name",
+              "displayName": "Business Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Workflow Description",
+              "displayName": "Workflow Description",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Discovery Answers",
+              "displayName": "Discovery Answers",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "SMS Number",
+              "displayName": "SMS Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "WhatsApp",
+              "displayName": "WhatsApp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Telegram ID",
+              "displayName": "Telegram ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Facebook PSID",
+              "displayName": "Facebook PSID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Chat Session",
+              "displayName": "Chat Session",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Scope of Work.",
+              "displayName": "Scope of Work.",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date Contacted",
+              "displayName": "Date Contacted",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Emailed",
+              "displayName": "Emailed",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Attempt",
+              "displayName": "Email Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Follow Up Date",
+              "displayName": "Email Follow Up Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Follow Up Sent",
+              "displayName": "Email Follow Up Sent",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Build Queue",
+              "displayName": "Build Queue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Contact Log",
+              "displayName": "Contact Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "id": "9bbdf9b2-503a-4caf-848d-c82dd36eb5b6",
+      "name": "Save to Leads (Airtable)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1328,
+        0
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQNctrP2yaZIfKt",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Phone": "={{ $('Loop Over Items').item.json.nationalPhoneNumber || '' }}",
+            "Website": "={{ $('Loop Over Items').item.json.websiteUri || '' }}",
+            "Status": "New",
+            "Emailed": false,
+            "Call Attempt": 0,
+            "Attempt Number": 0,
+            "Contact": "={{ $json.name !== 'Not Found' ? $json.name : '' }}",
+            "Type Of Business": "={{ $('Extract Map Query').item.json.text.split(' in ')[0] }}",
+            "Source": "={{ 'Google Maps \u2014 ' + $('Extract Map Query').item.json.text }}",
+            "Business Name": "={{ $('Loop Over Items').item.json.displayName.text }}",
+            "SMS Opted Out": false,
+            "SMS Follow Up Date": "={{ $today.plus({days: 1}).toISODate() }}",
+            "SMS Follow Up Sent": false,
+            "Call Opted Out": false,
+            "Call Follow Up Date": "={{ $today.plus({days: 2}).toISODate() }}",
+            "Call Follow Up Sent": false
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Type Of Business",
+              "displayName": "Type Of Business",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Business Name",
+              "displayName": "Business Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Contact",
+              "displayName": "Contact",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Contacted",
+                  "value": "Contacted"
+                },
+                {
+                  "name": "Interested",
+                  "value": "Interested"
+                },
+                {
+                  "name": "Dead",
+                  "value": "Dead"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Emailed",
+              "displayName": "Emailed",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attempt Number",
+              "displayName": "Attempt Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "SMS Opted Out",
+              "displayName": "SMS Opted Out",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "SMS Follow Up Date",
+              "displayName": "SMS Follow Up Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "SMS Follow Up Sent",
+              "displayName": "SMS Follow Up Sent",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Attempt",
+              "displayName": "Call Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Opted Out",
+              "displayName": "Call Opted Out",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Follow Up Date",
+              "displayName": "Call Follow Up Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Follow Up Sent",
+              "displayName": "Call Follow Up Sent",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "dcc5fbb6-c6ac-4aa2-9b38-e535c3babe41",
+      "name": "Save to No Email Leads (Airtable)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1328,
+        304
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblEr0WqpTLAeQROz",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Phone": "={{ $('Loop Over Items').item.json.nationalPhoneNumber || '' }}",
+            "Website": "={{ $('Loop Over Items').item.json.websiteUri || '' }}",
+            "Error": "={{ $json.error?.message || $json.error?.code || $json.message || 'Unknown error \u2014 review manually' }}",
+            "Date": "={{ $now.toISO() }}",
+            "Business Name": "={{ $('Loop Over Items').item.json.displayName.text || 'Name Not Found' }}",
+            "Type of Business": "={{ $('Extract Map Query').item.json.text.split(' in ')[0] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Business Name",
+              "displayName": "Business Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Type of Business",
+              "displayName": "Type of Business",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error",
+              "displayName": "Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "8727d611-2cf2-4054-9013-68427a924c15",
+      "name": "Save to Errors (Airtable)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        -208
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        112
+      ],
+      "id": "a217af0d-25e6-42fd-b4e2-6c92f5985d37",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=\u2705 Lead Run Complete!\n\n\ud83d\udccb Total processed: {{ $json.data.length }}\n\u2709\ufe0f Leads with email: {{ $json.data.filter(i => i.fields?.Email && i.fields.Email !== 'Not Found').length }}\n\ud83d\udcc1 Leads without email: {{ $json.data.filter(i => !i.fields?.Email || i.fields.Email === 'Not Found').length }}\n\u26a0\ufe0f Errors: {{ $json.data.filter(i => i.fields?.Error).length }}\n\nAll qualified leads saved to Airtable! Check Discovery Answers for fit scores. Sort by Score 4-5 to prioritize outreach. \u2705",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -368,
+        112
+      ],
+      "id": "6a206cf3-7b57-4906-81fb-bc7cda2f5b1d",
+      "name": "Send Completion Message",
+      "webhookId": "",
+      "credentials": {
+        "telegramApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "YOUR_AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQNctrP2yaZIfKt",
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "filterByFormula": "={Phone}='{{ $('Loop Over Items').item.json.nationalPhoneNumber }}'",
+        "returnAll": false,
+        "limit": 1,
+        "options": {},
+        "sort": {
+          "property": [
+            {
+              "field": "Attempt Number"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1312,
+        -640
+      ],
+      "id": "99da3ae7-291b-4026-a64e-52af7beca38f",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7d2bc80e-5b3f-4155-a823-20d5c19e2f80",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1520,
+        -640
+      ],
+      "id": "a0aebef6-1888-452b-b99f-97d6a97bfc38",
+      "name": "If"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Is Command?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Command?": {
+      "main": [
+        [
+          {
+            "node": "Which Command?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Map Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Which Command?": {
+      "main": [
+        [
+          {
+            "node": "Set Email Paused",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Email Active",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Email Paused": {
+      "main": [
+        [
+          {
+            "node": "Paused Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Email Active": {
+      "main": [
+        [
+          {
+            "node": "Resume Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Status Message": {
+      "main": [
+        [
+          {
+            "node": "Send Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Settings": {
+      "main": [
+        [
+          {
+            "node": "Build Status Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract Map Query",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Map Query": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send Ack \u2014 Searching",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Ack \u2014 Searching": {
+      "main": [
+        [
+          {
+            "node": "Google Maps API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Maps API": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Firecrawl Crawl Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Firecrawl Crawl Request": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save to Errors (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check Crawl Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Crawl Status": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save to Errors (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Save to Errors (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM response": {
+      "main": [
+        [
+          {
+            "node": "Score Filter (2+)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Filter (2+)": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Save to Leads (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Leads (Airtable)": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to No Email Leads (Airtable)": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Errors (Airtable)": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Send Completion Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Save to No Email Leads (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
+}
